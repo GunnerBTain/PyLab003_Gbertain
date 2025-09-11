@@ -1,22 +1,24 @@
-#!/usr/bin/env python3
 
-from pyre import Pyre
-from pyre import zhelper
-import zmq
-import uuid
-import json
-def get_peer_node(username):
+def get_peer_node(username): **function name is get_peer_node**
     n = Pyre(username)
     #n.set_header("CHAT_Header1","example header1")
     #n.set_header("CHAT_Header2","example header2")
     n.start()
-    return n #function name is get_peer_node
+    return n
 
-def join_group(node, group):
+# **username: This is most likely the users inputted name**
+
+# **Returns n. n seems to be an alias for Pyre**
+
+def join_group(node, group): #function name is join_group 
     node.join(group)
     print(f"Joined group: {group}") #function name is join_group
 
-def chat_task(ctx, pipe, n, group):
+# **No parameters**
+
+# **Returns nothing. it seems to join the user into a group and prints that they joined into the group.**
+
+def chat_task(ctx, pipe, n, group): **function name is chat_task** 
     poller = zmq.Poller()
     poller.register(pipe, zmq.POLLIN)
     # print(n.socket())
@@ -56,6 +58,25 @@ def chat_task(ctx, pipe, n, group):
             # print(f"NODE_MSG CONT: {cmds}")
     n.stop()
 
-def get_channel(node, group):
+
+# ctx: Unsure
+
+# pipe: Unsure
+
+# n: It looks like it stops the loop 
+
+# group: The group selected to join
+
+# It does not return anything. It probably makes the chat system work.
+
+def get_channel(node, group): **function name is get_channel**
     ctx = zmq.Context()
     return zhelper.zthread_fork(ctx, chat_task, n=node, group=group)
+
+# node: Another Alias for n?
+
+# group: The selected group
+
+# It returns zhelper.zthread_fork(ctx, chat_task, n=node, group=group)
+
+# My best guess is that it finds the correct channel to be in

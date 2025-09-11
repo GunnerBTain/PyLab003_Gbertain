@@ -3,15 +3,45 @@ def get_username():
     username = input("Enter your username: ")
     username = username.strip()
     print("Your username is:", username.upper())
+    return username
+#This function gets the group name inputted by the user
+def get_group():
+    group_name = input("Enter your group name: ")
+    group = group_name.strip()
+    print("Your group name is:", group.upper())
+    return group_name
+#This function gets a message inputted by the user
+def get_message():
+    message = input("Enter your message: ")
+    message = message.strip()
+    print("Your message is:", message)
+    return message
 
-#This calls the function
-get_username()
+#Calls the functions to start the program
+#username = get_username()
+#get_group()
+#get_message()
 
-rows = 10
-columns = 10
+import lab_chat as lc
 
-for i in range(1, rows + 1):
-    for j in range(1, columns + 1):
-        product = i * j
-        print(f"{i} x {j} = {product}")
-    print()
+def initialize_chat():
+    username = get_username()
+    group = get_group()
+    node = lc.get_peer_node(username)
+    lc.join_group(node, group)
+    channel = lc.get_channel(node,group)
+    return channel
+
+def start_chat():
+    channel = initialize_chat()
+
+    while True:
+        try:
+            msg = get_message()
+            channel.send(msg.encode('utf_8'))
+        except (KeyboardInterrupt, SystemExit):
+            break
+    channel.send("$$STOP".encode('utf_8'))
+    print("FINISHED")
+
+start_chat()
